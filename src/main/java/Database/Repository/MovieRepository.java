@@ -1,4 +1,4 @@
-package Database;
+package Database.Repository;
 
 import Models.Movie;
 

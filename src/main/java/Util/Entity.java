@@ -1,6 +1,6 @@
 package Util;
 
-import Database.AbstractRepository;
+import Database.Repository.AbstractRepository;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
