@@ -52,7 +52,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         return results.get(0);
     }
 
-    public List<T> getByField(String field, Object value) {
+    public List<T> findBy(String field, Object value) {
         return this.getObjects(this.getWhereStatement(field, value));
     }
 
@@ -170,6 +170,8 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
                 return resultSet.getFloat(name);
             } else if(LocalDateTime.class.equals(field.getType())) {
                 return LocalDateTime.parse(resultSet.getString(name), AbstractRepository.dateTimeFormatter);
+            } else if(field.getType().isEnum()) {
+                return field.getType().getMethod("valueOf", String.class).invoke(null, resultSet.getString(name));
             } else {
                 return field.getType().getConstructor(String.class).newInstance(resultSet.getString(name));
             }
@@ -219,7 +221,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         try {
             AbstractRepository<?> relatedRepository = relatedEntity.repository().getConstructor().newInstance();
             //noinspection unchecked
-            return (List<AbstractEntity>) relatedRepository.getByField(manyToOneRelation.remoteField(), resultSet.getInt("id"));
+            return (List<AbstractEntity>) relatedRepository.findBy(manyToOneRelation.remoteField(), resultSet.getInt("id"));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | SQLException e) {
             e.printStackTrace();
         }

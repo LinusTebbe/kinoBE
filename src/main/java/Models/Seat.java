@@ -12,7 +12,7 @@ public class Seat extends AbstractEntity {
     @Column(name = "position_y")
     private final int positionY;
 
-    @Column(name = "seat_type_id")
+    @Column(name = "seat_type")
     private final SeatType seatType;
 
     public Seat(int positionX, int positionY, SeatType seatType) {

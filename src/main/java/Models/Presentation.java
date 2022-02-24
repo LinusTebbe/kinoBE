@@ -1,22 +1,22 @@
 package Models;
 
+import Database.CustomDateSerializer;
 import Database.Repository.PresentationRepository;
 import Util.Column;
 import Util.Entity;
 import Util.OneToManyRelation;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDateTime;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 @Entity(name = "presentation", repository = PresentationRepository.class)
 public class Presentation extends AbstractEntity {
     @Column(name = "start")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private final LocalDateTime start;
 
+    @JsonIgnoreProperties("presentations")
     @OneToManyRelation(localField = "movie_id")
     private final Movie movie;
 

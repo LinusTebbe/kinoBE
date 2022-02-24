@@ -5,15 +5,10 @@ import Util.Column;
 import Util.Entity;
 import Util.ManyToOneRelation;
 import Util.OneToManyRelation;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Collection;
 import java.util.List;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 @Entity(name = "movies", repository = MovieRepository.class)
 public class Movie extends AbstractEntity {
 
@@ -56,6 +51,7 @@ public class Movie extends AbstractEntity {
     @Column(name = "is_dolby_atmos")
     private boolean isDolbyAtmos;
 
+    @JsonIgnoreProperties("movie")
     @ManyToOneRelation(remoteField = "movie_id", targetClass = Presentation.class)
     public List<Presentation> presentations;
 
