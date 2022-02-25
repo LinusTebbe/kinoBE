@@ -198,11 +198,6 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
     }
 
     private AbstractEntity parseOneToMany(Class<? extends AbstractEntity> clazz, Field field, ResultSet resultSet) {
-        T cachedEntity = this.databaseService.getEntityFromIdentityMap(this.modelClass, this.parseSimpleField(field, resultSet));
-        if (cachedEntity != null) {
-            return cachedEntity;
-        }
-
         Entity relatedEntity = clazz.getAnnotation(Entity.class);
         OneToManyRelation column = field.getAnnotation(OneToManyRelation.class);
         try {

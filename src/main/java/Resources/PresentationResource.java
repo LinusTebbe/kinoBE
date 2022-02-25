@@ -1,3 +1,5 @@
+package Resources;
+
 import Database.Repository.PresentationRepository;
 import Models.Presentation;
 import org.restlet.resource.Get;
@@ -13,7 +15,7 @@ public class PresentationResource extends ServerResource {
 
         String movieId = this.getQuery().getValues("movie_id");
 
-        if (movieId.isEmpty()) {
+        if (movieId == null || movieId.isEmpty()) {
             return presentationRepository.findAll();
         }
 

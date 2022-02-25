@@ -6,6 +6,7 @@ import Util.*;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DatabaseService {
     private static final String DSN = "jdbc:sqlite:database.sqlite";
@@ -45,7 +46,11 @@ public class DatabaseService {
     public void flush() {
         for (Map<Object, AbstractEntity> map : DatabaseService.IDENTITY_MAP.values()) {
             for (AbstractEntity entity : map.values()) {
-                if(entity.getInitialHash() != entity.hashCode()) {
+                System.out.println(entity.getClass().toString() + entity.getInitialHash());
+                if (
+                        entity.getInitialHash() != 0 &&
+                        entity.getInitialHash() != entity.hashCode()
+                ) {
                     System.out.println(entity);
                     this.update(entity);
                 }
@@ -53,27 +58,56 @@ public class DatabaseService {
         }
     }
 
-    private void update(AbstractEntity entity) {
+    public void persist(AbstractEntity entity) {
+        this.insert(entity);
+        this.saveEntityToIdentityMap(entity);
+    }
+
+    private void insert(AbstractEntity entity) {
+        Map<String, Object> fieldsAndValues = this.getFieldsAndValues(entity);
+        Set<String> fields = fieldsAndValues.keySet();
+        List<Object> values = new ArrayList<>(fieldsAndValues.values());
+
         String tableName = entity.getClass().getAnnotation(Entity.class).name();
-        List<String> fields = new ArrayList<>();
-        List<Object> values = new ArrayList<>();
-        for (Field field: FieldTools.getAllFields(entity.getClass())) {
-            Column column = field.getAnnotation(Column.class);
-            if (
-                    column == null ||
-                    field.getAnnotation(Id.class) != null ||
-                    field.getAnnotation(OneToManyRelation.class) != null
-            ) {
-                continue;
+
+        String sqlStatement = String.format(
+                DatabaseService.DEFAULT_INSERT,
+                tableName,
+                String.join(", ", fields),
+                fields.stream().map(field -> "?").collect(Collectors.joining(", "))
+        );
+
+        int updatedRows;
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = this.prepareStatement(sqlStatement, values);
+            updatedRows = preparedStatement.executeUpdate();
+
+            if(updatedRows > 0) {
+                FieldTools.setInitialHash(entity);
             }
 
-            try {
-                values.add(field.get(entity).toString());
-                fields.add(column.name() + " = ?");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                Field field = entity.getClass().getSuperclass().getDeclaredField("id");
+                field.setAccessible(true);
+                field.set(entity, resultSet.getInt(1));
             }
+        } catch (SQLException|NoSuchFieldException|IllegalAccessException e) {
+            e.printStackTrace();
         }
+
+        System.out.println(sqlStatement);
+    }
+
+    private void update(AbstractEntity entity) {
+        Map<String, Object> fieldsAndValues = this.getFieldsAndValues(entity);
+        Set<String> fields = fieldsAndValues.keySet();
+        Collection<Object> values = fieldsAndValues.values();
+
+        fields = fields.stream().map(field -> field + " = ?").collect(Collectors.toSet());
+
+        String tableName = entity.getClass().getAnnotation(Entity.class).name();
 
         String sqlStatement = String.format(
                 DatabaseService.DEFAULT_UPDATE,
@@ -82,12 +116,45 @@ public class DatabaseService {
         );
 
         values.add(entity.getId());
-        int updatedRows = this.runPreparedUpdate(sqlStatement, values);
+        int updatedRows = this.runPreparedUpdate(sqlStatement, (List<Object>) values);
         if(updatedRows > 0) {
             FieldTools.setInitialHash(entity);
         }
 
         System.out.println(sqlStatement);
+    }
+
+    private Map<String, Object> getFieldsAndValues(AbstractEntity entity) {
+        Map<String, Object> outputMap = new HashMap<>();
+        for (Field field: FieldTools.getAllFields(entity.getClass())) {
+            Column column = field.getAnnotation(Column.class);
+
+            if (field.getAnnotation(Id.class) != null) {
+                continue;
+            }
+
+            Object value;
+
+            try {
+                value = field.get(entity);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            OneToManyRelation oneToManyRelation = field.getAnnotation(OneToManyRelation.class);
+            System.out.println(123);
+            if (oneToManyRelation != null) {
+                outputMap.put(oneToManyRelation.localField(), ((AbstractEntity) value).getId());
+                continue;
+            }
+
+            if (column == null) {
+                continue;
+            }
+            outputMap.put(column.name(), value.toString());
+        }
+        return outputMap;
     }
 
     public ResultSet runQuery(String query) {

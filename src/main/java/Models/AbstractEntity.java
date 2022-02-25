@@ -18,7 +18,7 @@ public abstract class AbstractEntity {
     private final int initialHash;
 
     public AbstractEntity() {
-        this.initialHash = this.hashCode();
+        this.initialHash = 0;
     }
 
     public int getId() {

@@ -1,3 +1,5 @@
+package Resources;
+
 import Database.Repository.MovieRepository;
 import Models.Movie;
 import org.restlet.resource.Get;
