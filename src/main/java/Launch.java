@@ -9,10 +9,8 @@ import java.util.List;
 
 public class Launch {
     public static void main(String[] args) throws Exception {
-        // Create a new Component.
         Component component = new Component();
 
-        // Add a new HTTP server listening on port 8182.
         component.getServers().add(Protocol.HTTP, 8182);
 
         Application application = new Server();
@@ -21,11 +19,8 @@ public class Launch {
         CorsService corsService = new CorsService();
         corsService.setAllowedOrigins(new HashSet<>(List.of("*")));
         corsService.setAllowedCredentials(true);
-
         application.getServices().add(corsService);
 
-
-        // Start the component.
         component.start();
     }
 
