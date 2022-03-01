@@ -9,14 +9,14 @@ import java.util.List;
 
 @Entity(name = "cinema_hall", repository = CinemaHallRepository.class)
 public class CinemaHall extends AbstractEntity {
-    @ManyToOneRelation(remoteField = "cinema_hall_id", targetClass = Seat.class)
-    private final List<Seat> seats;
+    @ManyToOneRelation(remoteField = "cinema_hall_id", targetClass = SeatRow.class)
+    private final List<SeatRow> seatRows;
 
     public CinemaHall() {
-        this.seats = new ArrayList<>();
+        this.seatRows = new ArrayList<>();
     }
 
-    public List<Seat> getSeats() {
-        return this.seats;
+    public List<SeatRow> getSeatRows() {
+        return this.seatRows;
     }
 }
