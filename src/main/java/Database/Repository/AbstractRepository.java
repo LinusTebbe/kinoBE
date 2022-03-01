@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractRepository<T extends AbstractEntity> {
-    private final Class<T> modelClass;
+    protected final Class<T> modelClass;
 
-    private final DatabaseService databaseService;
+    protected final DatabaseService databaseService;
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
 

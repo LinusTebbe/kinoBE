@@ -53,7 +53,7 @@ public class Movie extends AbstractEntity {
 
     @JsonIgnoreProperties("movie")
     @ManyToOneRelation(remoteField = "movie_id", targetClass = Presentation.class)
-    public List<Presentation> presentations;
+    private List<Presentation> presentations;
 
     public Movie(String title, String imagePath, String shortDescription, String longDescription, String releasedDate, String duration, Category category, AgeCategory ageCategory, float priceStandard, float priceLodge, float priceParquet, boolean is3D, boolean isDolbyAtmos) {
         this.title = title;
@@ -173,5 +173,9 @@ public class Movie extends AbstractEntity {
 
     public void setDolbyAtmos(boolean dolbyAtmos) {
         isDolbyAtmos = dolbyAtmos;
+    }
+
+    public List<Presentation> getPresentations() {
+        return presentations;
     }
 }
