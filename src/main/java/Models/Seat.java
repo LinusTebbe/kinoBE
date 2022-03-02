@@ -6,27 +6,19 @@ import Util.Entity;
 
 @Entity(name = "seat", repository = SeatRepository.class)
 public class Seat extends AbstractEntity {
-    @Column(name = "position_x")
-    private final int positionX;
-
-    @Column(name = "position_y")
-    private final int positionY;
+    @Column(name = "position")
+    private final int position;
 
     @Column(name = "seat_type")
     private final SeatType seatType;
 
-    public Seat(int positionX, int positionY, SeatType seatType) {
-        this.positionX = positionX;
-        this.positionY = positionY;
+    public Seat(int position, SeatType seatType) {
+        this.position = position;
         this.seatType = seatType;
     }
 
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
+    public int getPosition() {
+        return position;
     }
 
     public SeatType getSeatType() {

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SeatRepository extends AbstractRepository<Seat> {
 
-    private static final String WHERE_SELECT_TEMPLATE = "SELECT * FROM %s WHERE %s = ? ORDER BY position_x ASC, position_y ASC";
+    private static final String WHERE_SELECT_TEMPLATE = "SELECT * FROM %s WHERE %s = ? ORDER BY position ASC";
 
     public SeatRepository() {
         super(Seat.class);

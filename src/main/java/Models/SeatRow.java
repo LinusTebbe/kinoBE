@@ -1,6 +1,5 @@
 package Models;
 
-import Database.Repository.SeatRepository;
 import Database.Repository.SeatRowRepository;
 import Util.Column;
 import Util.Entity;
