@@ -19,7 +19,7 @@ public class SeatRowRepository extends AbstractRepository<SeatRow> {
         return this.databaseService.runPreparedQuery(
                 String.format(
                         SeatRowRepository.WHERE_SELECT_TEMPLATE,
-                        Seat.class.getAnnotation(Entity.class).name(),
+                        SeatRow.class.getAnnotation(Entity.class).name(),
                         field
                 ),
                 List.of(value)
