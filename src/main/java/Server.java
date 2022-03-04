@@ -5,6 +5,7 @@ import org.restlet.ext.jackson.JacksonConverter;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class Server extends Application {

@@ -5,6 +5,7 @@ import Util.FieldTools;
 import Util.Hash;
 import Util.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import flexjson.JSON;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -25,7 +26,7 @@ public abstract class AbstractEntity {
         return this.id;
     }
 
-    @JsonIgnore
+    @JSON(include=false)
     public int getInitialHash() {
         return initialHash;
     }

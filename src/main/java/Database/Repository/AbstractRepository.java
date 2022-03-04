@@ -11,9 +11,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractRepository<T extends AbstractEntity> {
@@ -21,7 +22,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
 
     protected final DatabaseService databaseService;
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+    private static final DateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     private static final String DEFAULT_SELECT_TEMPLATE = "SELECT * FROM %s";
 
@@ -168,8 +169,9 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
                 return resultSet.getBoolean(name);
             } else if (float.class.equals(field.getType())) {
                 return resultSet.getFloat(name);
-            } else if(LocalDateTime.class.equals(field.getType())) {
-                return LocalDateTime.parse(resultSet.getString(name), AbstractRepository.dateTimeFormatter);
+            } else if(Date.class.equals(field.getType())) {
+                System.out.println(AbstractRepository.dateTimeFormatter.parse(resultSet.getString(name)));
+                return AbstractRepository.dateTimeFormatter.parse(resultSet.getString(name));
             } else if(field.getType().isEnum()) {
                 return field.getType().getMethod("valueOf", String.class).invoke(null, resultSet.getString(name));
             } else {

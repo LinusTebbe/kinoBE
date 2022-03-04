@@ -8,13 +8,13 @@ import Util.OneToManyRelation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity(name = "presentation", repository = PresentationRepository.class)
 public class Presentation extends AbstractEntity {
     @Column(name = "start")
     @JsonSerialize(using = CustomDateSerializer.class)
-    private final LocalDateTime start;
+    private final Date start;
 
     @JsonIgnoreProperties("presentations")
     @OneToManyRelation(localField = "movie_id")
@@ -23,13 +23,13 @@ public class Presentation extends AbstractEntity {
     @OneToManyRelation(localField = "cinema_hall_id")
     private final CinemaHall cinemaHall;
 
-    public Presentation(LocalDateTime start, Movie movie, CinemaHall cinemaHall) {
+    public Presentation(Date start, Movie movie, CinemaHall cinemaHall) {
         this.start = start;
         this.movie = movie;
         this.cinemaHall = cinemaHall;
     }
 
-    public LocalDateTime getStart() {
+    public Date getStart() {
         return start;
     }
 
