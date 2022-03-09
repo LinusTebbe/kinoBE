@@ -16,8 +16,12 @@ public class Serializers {
         return Serializers.getBasicJSONSerializer().include(
                 "id",
                 "start",
+                "movie.title",
+                "cinemaHall.seatRows.seatRowType",
+                "cinemaHall.seatRows.number",
                 "cinemaHall.seatRows.seats.id",
                 "cinemaHall.seatRows.seats.position",
+                "cinemaHall.seatRows.seats.seatType",
                 "cinemaHall.seatRows.seats.reservations.presentation.id"
         ).exclude("*");
     }
