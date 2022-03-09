@@ -1,17 +1,15 @@
 package Resources;
 
 import Database.Repository.MovieRepository;
-import Models.Movie;
+import Util.Serializers;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
-
-import java.util.List;
 
 public class MoviesResource extends ServerResource {
 
     @Get("json")
-    public List<Movie> represent() {
+    public String represent() {
         MovieRepository movieRepository = new MovieRepository();
-        return movieRepository.findAll();
+        return Serializers.getForMoviesSet().deepSerialize(movieRepository.findAll());
     }
 }
