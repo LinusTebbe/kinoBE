@@ -6,8 +6,6 @@ import flexjson.transformer.DateTransformer;
 import java.util.Date;
 
 public class Serializers {
-    public static final JSONSerializer presentationsGet = Serializers.getForPresentationSet();
-
     private static JSONSerializer getBasicJSONSerializer() {
         return new JSONSerializer().transform(
                 new DateTransformer("yyyy-MM-dd'T'HH:mm:ss"), Date.class
@@ -16,10 +14,12 @@ public class Serializers {
 
     public static JSONSerializer getForPresentationSet() {
         return Serializers.getBasicJSONSerializer().include(
+                "id",
                 "start",
-                "cinemaHall",
-                "cinemaHall.seatRows.seats.position"
-        );
+                "cinemaHall.seatRows.seats.id",
+                "cinemaHall.seatRows.seats.position",
+                "cinemaHall.seatRows.seats.reservations.presentation.id"
+        ).exclude("*");
     }
 }
 

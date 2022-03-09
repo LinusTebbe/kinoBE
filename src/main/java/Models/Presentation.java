@@ -4,11 +4,14 @@ import Database.CustomDateSerializer;
 import Database.Repository.PresentationRepository;
 import Util.Column;
 import Util.Entity;
+import Util.ManyToOneRelation;
 import Util.OneToManyRelation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "presentation", repository = PresentationRepository.class)
 public class Presentation extends AbstractEntity {
@@ -23,10 +26,14 @@ public class Presentation extends AbstractEntity {
     @OneToManyRelation(localField = "cinema_hall_id")
     private final CinemaHall cinemaHall;
 
+    @ManyToOneRelation(targetClass=Reservation.class, remoteField="presentation_id")
+    private final List<Reservation> reservations;
+
     public Presentation(Date start, Movie movie, CinemaHall cinemaHall) {
         this.start = start;
         this.movie = movie;
         this.cinemaHall = cinemaHall;
+        this.reservations = new ArrayList<>();
     }
 
     public Date getStart() {
@@ -39,5 +46,9 @@ public class Presentation extends AbstractEntity {
 
     public CinemaHall getCinemaHall() {
         return cinemaHall;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 }
