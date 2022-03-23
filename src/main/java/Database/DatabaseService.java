@@ -103,7 +103,7 @@ public class DatabaseService {
     private void update(AbstractEntity entity) {
         Map<String, Object> fieldsAndValues = this.getFieldsAndValues(entity);
         Set<String> fields = fieldsAndValues.keySet();
-        Collection<Object> values = fieldsAndValues.values();
+        List<Object> values = new ArrayList<>(fieldsAndValues.values());
 
         fields = fields.stream().map(field -> field + " = ?").collect(Collectors.toSet());
 
@@ -116,7 +116,7 @@ public class DatabaseService {
         );
 
         values.add(entity.getId());
-        int updatedRows = this.runPreparedUpdate(sqlStatement, (List<Object>) values);
+        int updatedRows = this.runPreparedUpdate(sqlStatement, values);
         if(updatedRows > 0) {
             FieldTools.setInitialHash(entity);
         }

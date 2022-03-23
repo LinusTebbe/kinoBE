@@ -5,6 +5,7 @@ import Database.Repository.PresentationRepository;
 import Database.Repository.ReservationRepository;
 import Database.Repository.SeatRepository;
 import Exceptions.EntityNotFoundException;
+import Models.Booking;
 import Models.Presentation;
 import Models.Reservation;
 import Models.Seat;
@@ -25,15 +26,21 @@ public class ReservationResource extends ServerResource {
 
     @Post("json")
     public List<Integer> doPost(ReservationRequest request) throws EntityNotFoundException {
+        DatabaseService databaseService = DatabaseService.getInstance();
 
         SeatRepository seatRepository = new SeatRepository();
-        Seat seat = seatRepository.getById(request.getSeatIds().stream().findFirst().get());
         Presentation presentation = (new PresentationRepository()).getById(request.getPresentationId());
 
-        Reservation reservation = new Reservation(presentation, seat);
+        Booking booking = new Booking();
+        databaseService.persist(booking);
 
-        DatabaseService databaseService = DatabaseService.getInstance();
-        databaseService.persist(reservation);
+        for (int seatId: request.getSeatIds()) {
+            Seat seat = seatRepository.getById(seatId);
+            Reservation reservation = new Reservation(presentation, seat);
+            seat.getReservations().add(reservation);
+            booking.getReservations().add(reservation);
+            databaseService.persist(reservation);
+        }
         databaseService.flush();
 
         return request.getSeatIds();
