@@ -4,6 +4,7 @@ import Database.Repository.SeatRepository;
 import Util.Column;
 import Util.Entity;
 import Util.ManyToOneRelation;
+import Util.OneToManyRelation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,14 @@ public class Seat extends AbstractEntity {
     @ManyToOneRelation(targetClass=Reservation.class, remoteField="seat_id")
     private final List<Reservation> reservations;
 
-    public Seat(int position, SeatType seatType) {
+    @OneToManyRelation(localField = "seat_row_id")
+    private final SeatRow seatRow;
+
+    public Seat(int position, SeatType seatType, SeatRow seatRow) {
         this.position = position;
         this.seatType = seatType;
         this.reservations = new ArrayList<>();
+        this.seatRow = seatRow;
     }
 
     public int getPosition() {
@@ -35,5 +40,17 @@ public class Seat extends AbstractEntity {
 
     public List<Reservation> getReservations() {
         return reservations;
+    }
+
+    public SeatRowType getSeatRowType() {
+        return this.seatRow.getSeatRowType();
+    }
+
+    public String getIdentifier() {
+        return String.format(
+                "Reihe %s / Sitz %s",
+                this.seatRow.getIdentifier(),
+                this.getPosition()
+        );
     }
 }

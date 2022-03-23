@@ -36,9 +36,6 @@ public class Movie extends AbstractEntity {
     @OneToManyRelation(localField = "age_category_id")
     private AgeCategory ageCategory;
 
-    @Column(name = "price_standard")
-    private float priceStandard;
-
     @Column(name = "price_lodge")
     private float priceLodge;
 
@@ -55,7 +52,7 @@ public class Movie extends AbstractEntity {
     @ManyToOneRelation(remoteField = "movie_id", targetClass = Presentation.class)
     private List<Presentation> presentations;
 
-    public Movie(String title, String imagePath, String shortDescription, String longDescription, String releasedDate, String duration, Category category, AgeCategory ageCategory, float priceStandard, float priceLodge, float priceParquet, boolean is3D, boolean isDolbyAtmos) {
+    public Movie(String title, String imagePath, String shortDescription, String longDescription, String releasedDate, String duration, Category category, AgeCategory ageCategory, float priceLodge, float priceParquet, boolean is3D, boolean isDolbyAtmos) {
         this.title = title;
         this.imagePath = imagePath;
         this.shortDescription = shortDescription;
@@ -64,7 +61,6 @@ public class Movie extends AbstractEntity {
         this.duration = duration;
         this.category = category;
         this.ageCategory = ageCategory;
-        this.priceStandard = priceStandard;
         this.priceLodge = priceLodge;
         this.priceParquet = priceParquet;
         this.is3D = is3D;
@@ -133,14 +129,6 @@ public class Movie extends AbstractEntity {
 
     public void setAgeCategory(AgeCategory ageCategory) {
         this.ageCategory = ageCategory;
-    }
-
-    public float getPriceStandard() {
-        return priceStandard;
-    }
-
-    public void setPriceStandard(float priceStandard) {
-        this.priceStandard = priceStandard;
     }
 
     public float getPriceLodge() {

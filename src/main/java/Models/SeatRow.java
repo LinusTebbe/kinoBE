@@ -11,7 +11,7 @@ import java.util.List;
 @Entity(name = "seat_row", repository = SeatRowRepository.class)
 public class SeatRow extends AbstractEntity {
     @Column(name = "number")
-    private final int number;
+    private final String identifier;
 
     @Column(name = "seat_row_type")
     private final SeatRowType seatRowType;
@@ -19,14 +19,14 @@ public class SeatRow extends AbstractEntity {
     @ManyToOneRelation(remoteField = "seat_row_id", targetClass = Seat.class)
     private final List<Seat> seats;
 
-    public SeatRow(int number, SeatRowType seatRowType) {
-        this.number = number;
+    public SeatRow(String identifier, SeatRowType seatRowType) {
+        this.identifier = identifier;
         this.seatRowType = seatRowType;
         this.seats = new ArrayList<>();
     }
 
-    public int getNumber() {
-        return number;
+    public String getIdentifier() {
+        return identifier;
     }
 
     public List<Seat> getSeats() {

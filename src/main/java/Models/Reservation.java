@@ -24,4 +24,8 @@ public class Reservation extends AbstractEntity {
     public Seat getSeat() {
         return seat;
     }
+
+    public int getPresentationId() {
+        return this.presentation.getId();
+    }
 }

@@ -17,12 +17,17 @@ public class Serializers {
                 "id",
                 "start",
                 "movie.title",
-                "cinemaHall.seatRows.seatRowType",
+                "movie.priceLodge",
+                "movie.priceParquet",
+                "cinemaHall.seatRows.id",
                 "cinemaHall.seatRows.number",
+                "cinemaHall.seatRows.seatRowType",
                 "cinemaHall.seatRows.seats.id",
+                "cinemaHall.seatRows.seats.identifier",
                 "cinemaHall.seatRows.seats.position",
                 "cinemaHall.seatRows.seats.seatType",
-                "cinemaHall.seatRows.seats.reservations.presentation.id"
+                "cinemaHall.seatRows.seats.seatRowType",
+                "cinemaHall.seatRows.seats.reservations.presentationId"
         ).exclude("*");
     }
 
